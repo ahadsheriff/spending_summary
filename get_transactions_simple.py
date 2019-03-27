@@ -22,7 +22,7 @@ for transaction in some_transactions['transactions']:
     calc_change = round_up - amount
     change = round(calc_change, 2)
 
-    print('You spent $' + str(amount), 'at', name + '. We will donate $' + str(change), 'to the organization of the month.')
+    print('You spent $' + str(amount), 'at', name + '. Spare change:', change)
 
 """
 print(f'there are {some_transactions["total_transactions"]} total transactions between those dates.')
