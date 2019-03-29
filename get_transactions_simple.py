@@ -16,14 +16,14 @@ some_transactions = get_some_transactions(
     os.getenv('CHASE_ACCESS_TOKEN'), '2019-01-01', '2019-03-27')
 
 for transaction in some_transactions['transactions']:
-    #print(transaction)
     name = transaction['name']
+    date = transaction['date']
     amount = transaction['amount']
     round_up = math.ceil(amount)
     calc_change = round_up - amount
     change = round(calc_change, 2)
 
-    print('You spent $' + str(amount), 'at', name + '. Spare change:', change)
+    print('You spent $' + str(amount), 'at', name + '. Spare change:', change, 'on:', date)
 
 """
 print(f'there are {some_transactions["total_transactions"]} total transactions between those dates.')

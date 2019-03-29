@@ -7,12 +7,19 @@ from typing import List
 # twilio.rest has a Client too, so let's avoid a namespace collision
 from plaid import Client as PlaidClient
 
+today = datetime.date.today()
+yesterday = today-datetime.timedelta(days = 14)
+fmt_today = today.strftime('%Y-%m-%d')
+fmt_yesterday = yesterday.strftime('%Y-%m-%d')
+
+BANK = os.getenv('CHASE_ACCESS_TOKEN')
+
 plaid_client = PlaidClient(client_id=os.getenv('PLAID_CLIENT_ID'), secret=os.getenv(
     'PLAID_SECRET'), public_key=os.getenv('PLAID_PUBLIC_KEY'), environment=os.getenv('PLAID_ENV'))
 
 # https://plaid.com/docs/api/#transactions
 MAX_TRANSACTIONS_PER_PAGE = 500
-OMIT_CATEGORIES = ["Transfer", "Deposit", "Payment"]
+OMIT_CATEGORIES = ["Transfer", "Deposit", "Credit Card", "Payment"]
 OMIT_ACCOUNT_SUBTYPES = ['cd', 'savings']
 
 
@@ -31,8 +38,19 @@ def get_transactions(access_token: str, start_date: str, end_date: str) -> List[
         if transaction['category'] is None or not any(category in OMIT_CATEGORIES for category in transaction['category'])]
     return transactions
 
+"""
+some_transactions = get_transactions(BANK, fmt_yesterday, fmt_today)
+print(f"There are {len(some_transactions)} transactions")
 
-some_transactions = get_transactions(
-    os.getenv('CHASE_ACCESS_TOKEN'), '1972-01-01', '2017-05-26')
-print(f"there are {len(some_transactions)} transactions")
-pprint([transaction for transaction in some_transactions if transaction['amount'] < 0])
+for transaction in some_transactions:
+    name = transaction['name']
+    date = transaction['date']
+    amount = transaction['amount']
+    round_up = math.ceil(amount)
+    calc_change = round_up - amount
+    change = round(calc_change, 2)
+
+    print('You spent $' + str(amount), 'at', name + '. Spare change: $' + str(change), 'on:', date)
+
+pprint([transaction for transaction in some_transactions if transaction['amount'] > 0])
+"""
