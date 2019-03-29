@@ -16,6 +16,7 @@ some_transactions = get_some_transactions(
     os.getenv('CHASE_ACCESS_TOKEN'), '2019-01-01', '2019-03-27')
 
 for transaction in some_transactions['transactions']:
+    #print(transaction)
     name = transaction['name']
     amount = transaction['amount']
     round_up = math.ceil(amount)
