@@ -37,20 +37,3 @@ def get_transactions(access_token: str, start_date: str, end_date: str) -> List[
         for transaction in plaid_client.Transactions.get(access_token, start_date, end_date, account_ids=account_ids, offset=page_num * MAX_TRANSACTIONS_PER_PAGE, count=MAX_TRANSACTIONS_PER_PAGE)['transactions']
         if transaction['category'] is None or not any(category in OMIT_CATEGORIES for category in transaction['category'])]
     return transactions
-
-"""
-some_transactions = get_transactions(BANK, fmt_yesterday, fmt_today)
-print(f"There are {len(some_transactions)} transactions")
-
-for transaction in some_transactions:
-    name = transaction['name']
-    date = transaction['date']
-    amount = transaction['amount']
-    round_up = math.ceil(amount)
-    calc_change = round_up - amount
-    change = round(calc_change, 2)
-
-    print('You spent $' + str(amount), 'at', name + '. Spare change: $' + str(change), 'on:', date)
-
-pprint([transaction for transaction in some_transactions if transaction['amount'] > 0])
-"""
