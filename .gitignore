@@ -84,7 +84,7 @@ celerybeat-schedule
 # Environments
 *.env
 .venv
-PLAID_ENV
+KEYS_ENV
 env/
 venv/
 ENV/
